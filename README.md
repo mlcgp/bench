@@ -9,7 +9,14 @@
 
 ![bench-logo](https://github.com/mlcgp/bench/blob/master/images/screengrab.png?raw=true)
 
-[TOC]
+- [Install Bench](#install-bench)
+- [Use Bench](#use-bench)
+  * [Getting Started](#getting-started)
+    + [IEX Cloud](#iex-cloud)
+    + [PostgreSQL Database](#postgresql-database)
+  * [Commands](#commands)
+  * [Environment Configuration](#environment-configuration)
+- [Roadmap](#roadmap)
 
 ## Install Bench
 
@@ -48,6 +55,8 @@ Sign up for IEX Cloud and get your API token: https://iexcloud.io/
 All you need to do is create a new Postgres database - that's it!
 
 The SQL queries and API calls are executed with ```$ bench run``` -- that's where all the magic happens. The SQL queries can be found [here](https://github.com/mlcgp/bench/tree/master/bench/sql).
+
+![bench-gif](https://github.com/mlcgp/bench/blob/master/images/cli-gif.gif?raw=true)
 
 ### Commands
 
