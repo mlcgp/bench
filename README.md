@@ -23,6 +23,7 @@
 Requirements:
 
 * Python 3.9 or greater
+* PostgreSQL 13.9 or greater
 
 Recommended:
 
