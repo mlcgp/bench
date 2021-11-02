@@ -220,7 +220,7 @@ def watchlist():
 
 
 @app.command()
-def run(
+def pipeline(
     interval: str = typer.Option(..., "--interval", "-i"),
     number: int = typer.Option(..., "--number", "-n"),
     verbose: bool = typer.Option(False, "--verbose", "-v"),

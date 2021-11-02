@@ -1,10 +1,9 @@
+import os
+import time
 import pandas as pd
 import psycopg2 as pc
-import time
 from io import StringIO
 from pathlib import Path
-
-sql = Path("bench/sql/")
 
 
 class Database:
@@ -56,6 +55,7 @@ class Database:
         else:
             self.cur = None
         self.verbose = verbose
+        self.sql = Path(__file__).parent / "sql"
 
     def c(self):
         """PostgreSQL database connection.
@@ -118,8 +118,8 @@ class Database:
         cursor = self.cur
 
         try:
-            tables = open(sql / "create_tables.sql", "r")
-            temp_tables = open(sql / "create_temp_tables.sql", "r")
+            tables = open(self.sql / "create_tables.sql", "r")
+            temp_tables = open(self.sql / "create_temp_tables.sql", "r")
             cursor.execute(tables.read())
             cursor.execute(temp_tables.read())
             self.c.commit()
@@ -175,7 +175,7 @@ class Database:
 
                 # Find table column names
                 tablename = "'{}'".format(table)
-                column_query = open(sql / "find_columns.sql", "r")
+                column_query = open(self.sql / "find_columns.sql", "r")
                 cursor.execute(column_query.read().format(tablename))
                 query_result = cursor.fetchall()
                 queried_columns = [i[0] for i in query_result]
@@ -185,7 +185,7 @@ class Database:
                     # copy to temp table
                     if self.verbose == True:
                         print(f"Copying data to temp table {table} for {symbol}")
-                    copy_query = open(sql / "copy.sql", "r")
+                    copy_query = open(self.sql / "copy.sql", "r")
                     temp_table = "t" + table
                     cursor.copy_expert(
                         copy_query.read().format(temp_table, columns), buffer
@@ -194,7 +194,7 @@ class Database:
                     # merge temp table to prod table
                     if self.verbose == True:
                         print(f"Now upserting to {table} for {symbol}")
-                    merge_query = open(sql / "merge_stock.sql", "r")
+                    merge_query = open(self.sql / "merge_stock.sql", "r")
                     cursor.execute(merge_query.read().format(columns, symbol_wrap))
 
                     self.c.commit()
@@ -215,7 +215,7 @@ class Database:
 
                 # Find table column names
                 tablename = "'{}'".format(table)
-                column_query = open(sql / "find_columns.sql", "r")
+                column_query = open(self.sql / "find_columns.sql", "r")
                 cursor.execute(column_query.read().format(tablename))
                 query_result = cursor.fetchall()
                 queried_columns = [i[0] for i in query_result]
@@ -226,7 +226,7 @@ class Database:
                     # copy to temp table
                     if self.verbose == True:
                         print(f"Copying data to temp table {table} for {symbol}")
-                    copy_query = open(sql / "copy.sql", "r")
+                    copy_query = open(self.sql / "copy.sql", "r")
                     temp_table = "t" + table
                     cursor.copy_expert(
                         copy_query.read().format(temp_table, columns), buffer
@@ -235,13 +235,13 @@ class Database:
                     # merge temp table to prod table
                     if self.verbose == True:
                         print(f"Now upserting to {table} for {symbol}")
-                    merge_query = open(sql / "merge.sql", "r")
+                    merge_query = open(self.sql / "merge.sql", "r")
                     cursor.execute(
                         merge_query.read().format(columns, table, temp_table)
                     )
 
                     # update foreign keys
-                    update_fk = open(sql / "update_fk.sql", "r")
+                    update_fk = open(self.sql / "update_fk.sql", "r")
                     fk_update = update_fk.read()
                     cursor.execute(fk_update.format(table, symbol_wrap))
 

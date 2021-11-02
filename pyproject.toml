@@ -1,9 +1,10 @@
 [tool.poetry]
-name = "bench"
-version = "0.1.0"
+name = "bench-cli"
+version = "0.1.6"
 description = ""
 authors = ["Malcolm Gillespie <malcolmgillespie@outlook.com>"]
 readme = "README.md"
+homepage = "https://github.com/mlcgp/bench"
 repository = "https://github.com/mlcgp/bench-cli"
 keywords = ["finance", "portfolio", "investing", "data-science", "data-visualization", "analytics", "dashboards", "metrics"]
 packages = [
@@ -30,8 +31,8 @@ plotly-express = "^0.4.1"
 
 [tool.poetry.dev-dependencies]
 
-[tool.poetry.scripts]
-bench = "cli:app"
+[tool.poetry.plugins."console_scripts"]
+bench = "bench.cli:app"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
